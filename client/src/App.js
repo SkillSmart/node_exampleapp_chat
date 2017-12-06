@@ -54,7 +54,7 @@ class App extends Component {
         </p>
         <form onSubmit={this.handleSubmit}>
             <div className="input-group">
-              <label for="receiver">To</label>
+              <label htmlFor="receiver">To</label>
               <input
                 id="receiver"
                 name="to"
@@ -63,7 +63,7 @@ class App extends Component {
                 type="text" />
             </div>
             <div className="input-group">
-              <label for="receiver">From</label>
+              <label htmlFor="receiver">From</label>
               <input
                 id="sender"
                 name="from"
@@ -72,7 +72,7 @@ class App extends Component {
                 type="text" />
             </div>
             <div className="input-group">
-              <label for="receiver">From</label>
+              <label htmlFor="receiver">From</label>
               <textarea
                 id="message"
                 name="message"

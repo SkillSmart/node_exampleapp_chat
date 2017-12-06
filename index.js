@@ -21,6 +21,11 @@ require('./server/routes')(app);
 io.on('connection', (socket) => {
     console.log("new user connected");
 
+    // Broadcast:
+    socket.broadcast.emit('newMessage', {
+        from: 'Admin',
+        text: 'New user joined'
+    });
     // EMITS:   Server side listening
     socket.emit('newEmail', {
         from: 'mike@example.com',
@@ -28,8 +33,8 @@ io.on('connection', (socket) => {
         createdAt: Date.now()
     });
     socket.emit('newMessage', {
-        from: 'Andrew',
-        text: 'Text body',
+        from: 'Admin',
+        text: 'Welcome to the chat app',
         createdAt: Date.now()
     })
 
@@ -45,8 +50,10 @@ io.on('connection', (socket) => {
             socket.emit('timer', new Date());
         }, interval);
     });
-    socket.on('newMessage', (message) => {
-        console.log("New Message!: ", message);
+    socket.on('createMessage', (message) => {
+        console.log(message);
+        message.createdAt = Date.now();
+        socket.broadcast.emit('newMessage',message)
     })
 })
 

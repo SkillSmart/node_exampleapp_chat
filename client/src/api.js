@@ -39,7 +39,7 @@ function monitorMessage() {
 
 // EMITTERS
 function sendMessage(message) {
-    socket.emit('newMessage', message);
+    socket.emit('createMessage', message);
 };
 
 
