@@ -12,35 +12,32 @@ function subscribeToTimer(cb) {
 function monitorSocket() {
     socket.on('connect', () => {
         console.log("Connected to server");
-        socket.emit('newEmail', {
-            from: 'frank@test.com',
-            body: 'Hey! Well a lot is going on here!',
-            createdAt: Date.now()
-        });
     });
     socket.on('disconnect', () => {
         console.log("Disconnected from server");
     });
 };
 
-function monitorEmail() {
+function monitorMessages() {
     socket.on('newEmail', (email) => {
         console.log("new Email");
         console.log(email);
     });
 };
 
-function monitorMessage() {
-    socket.on('newMessage', message => {
-        console.log("New message received: ", message);
-    });
-};
-
-
 // EMITTERS
 function sendMessage(message) {
     socket.emit('createMessage', message);
 };
 
+function shareLocation(location) {
+    // console.log("Location at sending: ", location);
+    let body = {
+        lat: location.coords.latitude,
+        lng: location.coords.longitude
+    };
+    // console.log("Message at sending: ", body);
+    socket.emit('shareLocation', body);
+};
 
-export { subscribeToTimer, monitorSocket, monitorEmail, monitorMessage, sendMessage };
+export { subscribeToTimer, monitorSocket, sendMessage, shareLocation };

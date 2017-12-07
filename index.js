@@ -4,6 +4,7 @@ const express = require('express');
 // express uses under the hood to bring up the server
 const http = require('http');
 const socketIO = require('socket.io');
+const _ = require('lodash');
 
 // Set up the server
 const app = express();
@@ -13,6 +14,7 @@ let server = http.createServer(app);
 // now create an io server object, which we can call to establish and handle
 // socket connections in the app
 let io = socketIO(server);
+const {generateMessage, generateLocationMessage} = require('./server/utils/message');
 
 
 // require the routes
@@ -22,21 +24,9 @@ io.on('connection', (socket) => {
     console.log("new user connected");
 
     // Broadcast:
-    socket.broadcast.emit('newMessage', {
-        from: 'Admin',
-        text: 'New user joined'
-    });
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
     // EMITS:   Server side listening
-    socket.emit('newEmail', {
-        from: 'mike@example.com',
-        text: 'Hey what is going on',
-        createdAt: Date.now()
-    });
-    socket.emit('newMessage', {
-        from: 'Admin',
-        text: 'Welcome to the chat app',
-        createdAt: Date.now()
-    })
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the Chat app!'));
 
 
     // LISTENER:   Client side listening
@@ -52,8 +42,12 @@ io.on('connection', (socket) => {
     });
     socket.on('createMessage', (message) => {
         console.log(message);
-        message.createdAt = Date.now();
-        socket.broadcast.emit('newMessage',message)
+        let body = _.pick(message, ['from', 'body']);
+        socket.broadcast.emit('newMessage', generateMessage(body.from, body.body));
+    });
+    socket.on('shareLocation', (location) => {
+        console.log(location);
+        socket.broadcast.emit('newMessage', generateLocationMessage("Admin", location));
     })
 })
 
