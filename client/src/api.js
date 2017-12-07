@@ -18,12 +18,12 @@ function monitorSocket() {
     });
 };
 
-function monitorMessages() {
-    socket.on('newEmail', (email) => {
-        console.log("new Email");
-        console.log(email);
-    });
-};
+// function monitorMessages() {
+//     socket.on('newEmail', (email) => {
+//         console.log("new Email");
+//         console.log(email);
+//     });
+// };
 
 // EMITTERS
 function sendMessage(message) {
